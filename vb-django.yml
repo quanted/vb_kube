@@ -1,0 +1,84 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: vb-django
+spec:
+  selector:
+    app: vb-django
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+
+---
+
+# Persistent Volume for the angular static files and any other applications files used by django
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: vb-static-pvolume
+spec:
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  hostPath:
+    path: C:\git\vb\data\static
+  persistentVolumeReclaimPolicy: Recycle
+  storageClassName: static-pv1
+  volumeMode: Filesystem
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: vb-static-pvolume-claim1
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: slow
+  selector:
+    matchLabels:
+      release: "stable"
+    matchExpressions:
+      - {key: environment, operator: In, values: [dev]}
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: vb-django
+  name: vb-django
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+       app: vb-django
+  template:
+    metadata:
+      labels:
+        app: vb-django
+    spec:
+      containers:
+        image: kurtw555/vb-django
+        imagePullPolicy: Always
+        name: vb-django
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - mountPath: /opt/app/static
+          name: vb-static
+      restartPolicy: Always
+      volumes:
+      - name: vb-static
+        persistentVolumeClaim:
+          claimName: vb-static-pvolume-claim1

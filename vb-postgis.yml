@@ -1,0 +1,94 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgis-config
+  labels:
+    app: postgis
+data:
+  POSTGRES_DB: postgis
+  POSTGRES_USER: postgisadmin
+  POSTGRES_PASSWORD: postgisadmin
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: postgis-pv-volume
+  labels:
+    type: local
+    app: postgis
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/mnt/data"
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgis-pv-claim
+  labels:
+    app: postgis
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgis
+spec:
+  selector:
+    app: postgis
+  ports:
+  - protocol:
+    port: 5432
+    targetPort: 5432
+
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app: postgis
+  name: postgis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgis
+  serviceName: postgis
+  template:
+    metadata:
+      labels:
+        app: postgis
+    spec:
+      containers:
+      - image: kurtw555/postgis
+        name: postgis
+        ports:
+        - containerPort: 5432
+        envFrom:
+          - configMapRef:
+              name: postgis-config
+        volumeMounts:
+        - mountPath: /docker-entrypoint-initdb.d/
+          name: postgis-pvolume
+      terminationGracePeriodSeconds: 10
+      volumes:
+      - name: postgis-pvolume
+        persistentVolumeClaim:
+          claimName: postgis-pvolume-claim1

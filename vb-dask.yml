@@ -1,0 +1,66 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: dask-scheduler
+spec:
+  selector:
+    app: dask-scheduler
+  ports:
+  - name: dask-scheduler
+    port: 8786
+    targetPort: 8786
+  - name: dask-ui
+    port: 8787
+    targetPort: 8787
+
+---
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: dask-scheduler
+  name: dask-scheduler
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: dask-scheduler
+    spec:
+      containers:
+      - args:
+        - dask-scheduler
+        image: kurtw555/vb-dask
+        name: dask-scheduler
+        ports:
+        - containerPort: 8786
+        - containerPort: 8787
+      hostname: dask-scheduler
+      restartPolicy: Always
+
+---
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: dask-worker
+  name: dask-worker
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: dask-worker
+    spec:
+      containers:
+      - command:
+        - dask-worker
+        - dask-scheduler:8786
+        image: kurtw555/vb-dask
+        name: dask-worker
+      hostname: dask-worker
+      restartPolicy: Always
