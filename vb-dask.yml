@@ -15,7 +15,44 @@ spec:
 
 ---
 
-apiVersion: extensions/v1beta1
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: vb-dask-pvolume
+spec:
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  hostPath:
+    path: C:\git\vb\vb_kube\vb_django
+  persistentVolumeReclaimPolicy: Recycle
+  storageClassName: static-pv1
+  volumeMode: Filesystem
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: vb-dask-pvolume-claim1
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: slow
+  selector:
+    matchLabels:
+      release: "stable"
+    matchExpressions:
+      - {key: environment, operator: In, values: [dev]}
+
+---
+
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
@@ -23,6 +60,9 @@ metadata:
   name: dask-scheduler
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: dask-scheduler
   template:
     metadata:
       labels:
@@ -31,7 +71,7 @@ spec:
       containers:
       - args:
         - dask-scheduler
-        image: kurtw555/vb-dask
+        image: quanted/vb_dask:latest
         name: dask-scheduler
         ports:
         - containerPort: 8786
@@ -41,7 +81,7 @@ spec:
 
 ---
 
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
@@ -49,6 +89,9 @@ metadata:
   name: dask-worker
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: dask-worker
   strategy:
     type: Recreate
   template:
@@ -56,11 +99,24 @@ spec:
       labels:
         app: dask-worker
     spec:
-      containers:
-      - command:
-        - dask-worker
-        - dask-scheduler:8786
-        image: kurtw555/vb-dask
-        name: dask-worker
       hostname: dask-worker
       restartPolicy: Always
+      containers:
+      - name: dask-worker
+        command:
+        - dask-worker
+        - dask-scheduler:8786
+        image: quanted/vb_dask:latest
+        env:
+          - name: IN_DOCKER
+            value: "True"
+          - name: DASK_SCHEDULER
+            value: "dask-scheduler:8786"
+        volumeMounts:
+          - mountPath: /app
+            name: vb-dask-volume
+      volumes:
+        - name: vb-dask-volume
+          persistentVolumeClaim:
+            claimName: vb-dask-pvolume-claim1
+

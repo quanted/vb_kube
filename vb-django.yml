@@ -12,18 +12,17 @@ spec:
 
 ---
 
-# Persistent Volume for the angular static files and any other applications files used by django
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: vb-static-pvolume
+  name: vb-django-pvolume
 spec:
   accessModes:
   - ReadWriteOnce
   capacity:
     storage: 1Gi
   hostPath:
-    path: C:\git\vb\data\static
+    path: C:\git\vb\vb_kube\vb_django
   persistentVolumeReclaimPolicy: Recycle
   storageClassName: static-pv1
   volumeMode: Filesystem
@@ -33,7 +32,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: vb-static-pvolume-claim1
+  name: vb-django-pvolume-claim1
 spec:
   accessModes:
     - ReadWriteOnce
@@ -68,17 +67,25 @@ spec:
       labels:
         app: vb-django
     spec:
+      hostname: vb-django
       containers:
-        image: kurtw555/vb-django
+      - name: vb-django
+        image: quanted/vb_django:latest
         imagePullPolicy: Always
-        name: vb-django
+        env:
+          - name: IN_DOCKER
+            value: True
+          - name: DJANGO_SETTINGS_MODULE
+            value: vb_django.settings
+          - name: DASK_SCHEDULER
+            value: dask-scheduler:8786
         ports:
         - containerPort: 8080
         volumeMounts:
-        - mountPath: /opt/app/static
-          name: vb-static
+        - mountPath: /opt/app
+          name: vb-django-volume
       restartPolicy: Always
       volumes:
-      - name: vb-static
+      - name: vb-django-volume
         persistentVolumeClaim:
-          claimName: vb-static-pvolume-claim1
+          claimName: vb-django-pvolume-claim1

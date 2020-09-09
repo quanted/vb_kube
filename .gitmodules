@@ -1,0 +1,3 @@
+[submodule "vb_django"]
+	path = vb_django
+	url = https://github.com/quanted/vb_django.git
