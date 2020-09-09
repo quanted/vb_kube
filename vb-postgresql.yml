@@ -14,18 +14,18 @@ data:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: postgres-pv-volume
+  name: postgres-pv
   labels:
     type: local
     app: postgres
 spec:
-  storageClassName: manual
+  storageClassName: standard
   capacity:
     storage: 5Gi
   accessModes:
     - ReadWriteMany
   hostPath:
-    path: C:\git\vb\vb_kube\app_data
+    path: /Users/dsmith/Documents/git/vb_kube/app_data
 
 ---
 
@@ -36,12 +36,16 @@ metadata:
   labels:
     app: postgres
 spec:
-  storageClassName: manual
+  storageClassName: standard
   accessModes:
     - ReadWriteMany
   resources:
     requests:
       storage: 5Gi
+  selector:
+    matchLabels:
+      release: "stable"
+      name: postgres-pv
 
 ---
 
@@ -74,17 +78,16 @@ spec:
   template:
     metadata:
       labels:
-        app: postgis
+        app: postgres
     spec:
       containers:
       - image: postgres
-        hostname: postgres
         name: postgres
         ports:
         - containerPort: 5432
         envFrom:
           - configMapRef:
-              name: postgis-config
+              name: postgres-config
         volumeMounts:
         - mountPath: /var/lib/postgresql/data
           name: postgres-pvolume
@@ -92,4 +95,4 @@ spec:
       volumes:
       - name: postgres-pvolume
         persistentVolumeClaim:
-          claimName: postgres-pvolume-claim1
+          claimName: postgres-pv-claim

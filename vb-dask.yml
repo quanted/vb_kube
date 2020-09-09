@@ -13,42 +13,41 @@ spec:
     port: 8787
     targetPort: 8787
 
----
+#---
 
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: vb-dask-pvolume
-spec:
-  accessModes:
-  - ReadWriteOnce
-  capacity:
-    storage: 1Gi
-  hostPath:
-    path: C:\git\vb\vb_kube\vb_django
-  persistentVolumeReclaimPolicy: Recycle
-  storageClassName: static-pv1
-  volumeMode: Filesystem
-
----
-
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: vb-dask-pvolume-claim1
-spec:
-  accessModes:
-    - ReadWriteOnce
-  volumeMode: Filesystem
-  resources:
-    requests:
-      storage: 8Gi
-  storageClassName: slow
-  selector:
-    matchLabels:
-      release: "stable"
-    matchExpressions:
-      - {key: environment, operator: In, values: [dev]}
+#apiVersion: v1
+#kind: PersistentVolume
+#metadata:
+#  name: vb-dask-pvolume
+#spec:
+#  accessModes:
+#  - ReadWriteMany
+#  capacity:
+#    storage: 1Gi
+#  hostPath:
+#    path: "/Users/dsmith/Documents/git/vb_kube/vb_django"
+#  persistentVolumeReclaimPolicy: Recycle
+#  storageClassName: standard
+#  volumeMode: Filesystem
+#
+#---
+#
+#apiVersion: v1
+#kind: PersistentVolumeClaim
+#metadata:
+#  name: vb-dask-pvolume-claim1
+#spec:
+#  accessModes:
+#    - ReadWriteMany
+#  volumeMode: Filesystem
+#  resources:
+#    requests:
+#      storage: 8Gi
+#  storageClassName: standard
+#  selector:
+#    matchLabels:
+#      release: "stable"
+#      name: vb-dask-pvolume
 
 ---
 
@@ -63,6 +62,8 @@ spec:
   selector:
     matchLabels:
       app: dask-scheduler
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
@@ -113,10 +114,12 @@ spec:
           - name: DASK_SCHEDULER
             value: "dask-scheduler:8786"
         volumeMounts:
-          - mountPath: /app
+          - mountPath: /app/
             name: vb-dask-volume
       volumes:
         - name: vb-dask-volume
-          persistentVolumeClaim:
-            claimName: vb-dask-pvolume-claim1
+          hostPath:
+            path: /Users/dsmith/Documents/git/vb_kube/vb_django
+            type: Directory
+
 

@@ -3,49 +3,50 @@ kind: Service
 metadata:
   name: vb-django
 spec:
+  type: NodePort
   selector:
     app: vb-django
   ports:
     - protocol: TCP
       port: 8080
       targetPort: 8080
+      nodePort: 31000
 
----
-
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: vb-django-pvolume
-spec:
-  accessModes:
-  - ReadWriteOnce
-  capacity:
-    storage: 1Gi
-  hostPath:
-    path: C:\git\vb\vb_kube\vb_django
-  persistentVolumeReclaimPolicy: Recycle
-  storageClassName: static-pv1
-  volumeMode: Filesystem
-
----
-
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: vb-django-pvolume-claim1
-spec:
-  accessModes:
-    - ReadWriteOnce
-  volumeMode: Filesystem
-  resources:
-    requests:
-      storage: 8Gi
-  storageClassName: slow
-  selector:
-    matchLabels:
-      release: "stable"
-    matchExpressions:
-      - {key: environment, operator: In, values: [dev]}
+#---
+#
+#apiVersion: v1
+#kind: PersistentVolume
+#metadata:
+#  name: vb-django-pvolume
+#spec:
+#  accessModes:
+#  - ReadWriteMany
+#  capacity:
+#    storage: 1Gi
+#  hostPath:
+#    path: "/Users/dsmith/Documents/git/vb_kube/vb_django"
+#  persistentVolumeReclaimPolicy: Recycle
+#  storageClassName: standard
+#  volumeMode: Filesystem
+#
+#---
+#
+#apiVersion: v1
+#kind: PersistentVolumeClaim
+#metadata:
+#  name: vb-django-pvolume-claim
+#spec:
+#  accessModes:
+#    - ReadWriteMany
+#  volumeMode: Filesystem
+#  resources:
+#    requests:
+#      storage: 8Gi
+#  storageClassName: standard
+#  selector:
+#    matchLabels:
+#      release: "stable"
+#      name: vb-django-pvolume
 
 ---
 
@@ -74,18 +75,19 @@ spec:
         imagePullPolicy: Always
         env:
           - name: IN_DOCKER
-            value: True
+            value: "True"
           - name: DJANGO_SETTINGS_MODULE
-            value: vb_django.settings
+            value: "vb_django.settings"
           - name: DASK_SCHEDULER
-            value: dask-scheduler:8786
+            value: "dask-scheduler:8786"
         ports:
         - containerPort: 8080
         volumeMounts:
-        - mountPath: /opt/app
+        - mountPath: /opt/app/vb_django/
           name: vb-django-volume
       restartPolicy: Always
       volumes:
       - name: vb-django-volume
-        persistentVolumeClaim:
-          claimName: vb-django-pvolume-claim1
+        hostPath:
+          path: /Users/dsmith/Documents/git/vb_kube/vb_django
+          type: Directory
