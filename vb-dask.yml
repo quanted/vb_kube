@@ -114,12 +114,12 @@ spec:
           - name: DASK_SCHEDULER
             value: "dask-scheduler:8786"
         volumeMounts:
-          - mountPath: /app/
+          - mountPath: /app
             name: vb-dask-volume
       volumes:
         - name: vb-dask-volume
           hostPath:
-            path: /Users/dsmith/Documents/git/vb_kube/vb_django
+            path: /host/vb_django
             type: Directory
 
 
