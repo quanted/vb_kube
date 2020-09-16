@@ -20,6 +20,7 @@ metadata:
   labels:
     app: vb-django
   name: vb-django
+  namespace: default
 spec:
   replicas: 1
   strategy:
@@ -33,6 +34,7 @@ spec:
         app: vb-django
     spec:
       hostname: vb-django
+      serviceAccountName: dask-kube
       containers:
       - name: vb-django
         image: quanted/vb_django:latest
@@ -47,6 +49,12 @@ spec:
             value: "vb_django.settings"
           - name: DASK_SCHEDULER
             value: "dask-scheduler:8786"
+          - name: IN_KUBE
+            value: "0"
+          - name: IN_KUBE_N_MIN
+            value: "1"
+          - name: IN_KUBE_N_MAX
+            value: "10"
         ports:
         - containerPort: 8080
         volumeMounts:
