@@ -120,7 +120,7 @@ spec:
         - name: vb-dask-volume
           hostPath:
             path: /host/vb_django
-            type: Directory
+#            type: Directory
 
 ---
 
@@ -141,7 +141,7 @@ spec:
       name: cpu
       target:
         type: Utilization
-        averageUtilization: 50
+        averageUtilization: 75
 #  - type: Resource
 #    resource:
 #      name: memory
