@@ -1,7 +1,7 @@
 #!/bin/bash
 ECHO "Starting kubernetes instance for WVB"
 ECHO "Starting minikube"
-minikube start
+#minikube start
 ECHO "Enter path to vb_django repo: "
 read django_path
 ECHO "Enter path to app_data repo: "
@@ -16,5 +16,6 @@ ECHO "Applying WVB kubernetes elements"
 kubectl apply -f vb-postgresql.yml
 kubectl apply -f vb-dask.yml
 kubectl apply -f vb-django.yml
-start "minikube url" minikube service --url vb-django
+#start "minikube url" minikube service --url vb-django
+start "minikube tunnel" minikube tunnel
 ECHO "Completed kuberenetes startup of WVB"

@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: vb-django
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: vb-django
   ports:
