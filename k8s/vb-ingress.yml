@@ -14,5 +14,5 @@ spec:
       paths:
       - path: /
         backend:
-          serviceName: vb-django
-          servicePort: 8080
+          serviceName: vb-nginx
+          servicePort: 80

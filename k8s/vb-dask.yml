@@ -1,10 +1,10 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: dask-scheduler
+  name: vb-dask-scheduler
 spec:
   selector:
-    app: dask-scheduler
+    app: vb-dask-scheduler
   ports:
   - name: dask-scheduler
     port: 8786
@@ -19,29 +19,29 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: dask-scheduler
-  name: dask-scheduler
+    app: vb-dask-scheduler
+  name: vb-dask-scheduler
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: dask-scheduler
+      app: vb-dask-scheduler
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: dask-scheduler
+        app: vb-dask-scheduler
     spec:
       containers:
       - args:
         - dask-scheduler
-        image: quanted/vb_dask:latest
-        name: dask-scheduler
+        image: dbsmith88/vb_dask:latest
+        name: vb-dask-scheduler
         ports:
         - containerPort: 8786
         - containerPort: 8787
-      hostname: dask-scheduler
+      hostname: vb-dask-scheduler
       restartPolicy: Always
 
 ---
@@ -50,27 +50,27 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: dask-worker
-  name: dask-worker
+    app: vb-dask-worker
+  name: vb-dask-worker
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: dask-worker
+      app: vb-dask-worker
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: dask-worker
+        app: vb-dask-worker
     spec:
-      hostname: dask-worker
+      hostname: vb-dask-worker
       restartPolicy: Always
       containers:
-      - name: dask-worker
+      - name: vb-dask-worker
         command:
         - dask-worker
-        - dask-scheduler:8786
+        - vb-dask-scheduler:8786
         image: quanted/vb_dask:latest
         env:
           - name: IN_DOCKER
@@ -96,12 +96,12 @@ spec:
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: dask-worker
+  name: vb-dask-worker
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: dask-worker
+    name: vb-dask-worker
   minReplicas: 1
   maxReplicas: 10
   metrics:

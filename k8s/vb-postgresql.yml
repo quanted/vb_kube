@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: postgres-config
+  name: vb-postgres-config
   labels:
-    app: postgres
+    app: vb-postgres
 data:
   POSTGRES_DB: vb_postgres
   POSTGRES_USER: postgres
@@ -14,10 +14,10 @@ data:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: postgres-pv
+  name: vb-postgres-pv
   labels:
     type: local
-    app: postgres
+    app: vb-postgres
 spec:
   storageClassName: standard
   capacity:
@@ -32,9 +32,9 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: postgres-pv-claim
+  name: vb-postgres-pv-claim
   labels:
-    app: postgres
+    app: vb-postgres
 spec:
   storageClassName: standard
   accessModes:
@@ -45,7 +45,7 @@ spec:
   selector:
     matchLabels:
       release: "stable"
-      name: postgres-pv
+      name: vb-postgres-pv
 
 ---
 
@@ -55,7 +55,7 @@ metadata:
   name: postgres
 spec:
   selector:
-    app: postgres
+    app: vb-vb-postgres
   ports:
   - protocol:
     port: 5432
@@ -67,32 +67,32 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   labels:
-    app: postgres
-  name: postgres
+    app: vb-postgres
+  name: vb-postgres
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: postgres
-  serviceName: postgres
+      app: vb-postgres
+  serviceName: vb-postgres
   template:
     metadata:
       labels:
-        app: postgres
+        app: vb-postgres
     spec:
       containers:
       - image: postgres
-        name: postgres
+        name: vb-postgres
         ports:
         - containerPort: 5432
         envFrom:
           - configMapRef:
-              name: postgres-config
+              name: vb-postgres-config
         volumeMounts:
         - mountPath: /var/lib/postgresql/data
-          name: postgres-pvolume
+          name: vb-postgres-pvolume
       terminationGracePeriodSeconds: 10
       volumes:
-      - name: postgres-pvolume
+      - name: vb-postgres-pvolume
         persistentVolumeClaim:
-          claimName: postgres-pv-claim
+          claimName: vb-postgres-pv-claim

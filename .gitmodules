@@ -1,3 +1,9 @@
 [submodule "vb_django"]
 	path = vb_django
 	url = https://github.com/quanted/vb_django.git
+[submodule "vb_angular"]
+	path = vb_angular
+	url = https://github.com/quanted/vb_angular.git
+[submodule "vb_dask"]
+	path = vb_dask
+	url = https://github.com/quanted/vb_dask.git

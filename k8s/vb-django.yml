@@ -47,7 +47,7 @@ spec:
           - name: DJANGO_SETTINGS_MODULE
             value: "vb_django.settings"
           - name: DASK_SCHEDULER
-            value: "dask-scheduler:8786"
+            value: "vb-dask-scheduler:8786"
         ports:
         - containerPort: 8080
         volumeMounts:
