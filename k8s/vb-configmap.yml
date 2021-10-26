@@ -5,9 +5,9 @@ metadata:
   labels:
     app: vb-config
 data:
-  POSTGRES_DB: vb_postgres
-  POSTGRES_USER: postgres
-  POSTGRES_PASSWORD: postgres
-  IN_DOCKER: True
-  DASK_SCHEDULER: dask-scheduler:8786
-  DJANGO_SETTINGS_MODULE: vb_django.settings
+  POSTGRES_DB: "vb_postgres"
+  POSTGRES_USER: "postgres"
+  POSTGRES_PASSWORD: "postgres"
+  IN_DOCKER: "True"
+  DASK_SCHEDULER: "dask-scheduler:8786"
+  DJANGO_SETTINGS_MODULE: "vb_django.settings"
