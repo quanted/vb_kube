@@ -72,11 +72,9 @@ spec:
         - dask-worker
         - vb-dask-scheduler:8786
         image: dbsmith88/vb_dask:latest
-        env:
-          - name: IN_DOCKER
-            value: "True"
-          - name: DASK_SCHEDULER
-            value: "dask-scheduler:8786"
+        envFrom:
+          - configMapRef:
+              name: vb-config
         volumeMounts:
           - mountPath: /app
             name: vb-dask-volume

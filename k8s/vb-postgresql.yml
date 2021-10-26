@@ -1,17 +1,4 @@
 apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: vb-postgres-config
-  labels:
-    app: vb-postgres
-data:
-  POSTGRES_DB: vb_postgres
-  POSTGRES_USER: postgres
-  POSTGRES_PASSWORD: postgres
-
----
-
-apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: vb-postgres-pv
@@ -55,7 +42,7 @@ metadata:
   name: postgres
 spec:
   selector:
-    app: vb-vb-postgres
+    app: vb-postgres
   ports:
   - protocol:
     port: 5432
@@ -87,7 +74,7 @@ spec:
         - containerPort: 5432
         envFrom:
           - configMapRef:
-              name: vb-postgres-config
+              name: vb-config
         volumeMounts:
         - mountPath: /var/lib/postgresql/data
           name: vb-postgres-pvolume

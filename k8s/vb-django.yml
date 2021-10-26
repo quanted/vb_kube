@@ -41,13 +41,9 @@ spec:
           - sh
           - /opt/app/vb_django/start-server.sh
         imagePullPolicy: Always
-        env:
-          - name: IN_DOCKER
-            value: "True"
-          - name: DJANGO_SETTINGS_MODULE
-            value: "vb_django.settings"
-          - name: DASK_SCHEDULER
-            value: "vb-dask-scheduler:8786"
+        envFrom:
+          - configMapRef:
+              name: vb-config
         ports:
         - containerPort: 8080
         volumeMounts:
