@@ -36,7 +36,7 @@ spec:
       hostname: vb-django
       containers:
       - name: vb-django
-        image: quanted/vb_django:latest
+        image: dbsmith88/vb_django:latest
         command:
           - sh
           - /opt/app/vb_django/start-server.sh

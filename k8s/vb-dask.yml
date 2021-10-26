@@ -71,7 +71,7 @@ spec:
         command:
         - dask-worker
         - vb-dask-scheduler:8786
-        image: quanted/vb_dask:latest
+        image: dbsmith88/vb_dask:latest
         env:
           - name: IN_DOCKER
             value: "True"
