@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: vb-dask-worker
+  name: vb-dask-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vb-dask-worker
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: vb-dask-worker
+    spec:
+      hostname: vb-dask-worker
+      restartPolicy: Always
+      containers:
+      - name: vb-dask-worker
+        command:
+        - dask-worker
+        - vb-dask-scheduler:8786
+        image: dbsmith88/vb_dask:latest
+        envFrom:
+          - configMapRef:
+              name: vb-config
+        volumeMounts:
+          - mountPath: /app
+            name: vb-dask-volume
+        resources:
+          requests:
+            memory: "2Gi"
+          limits:
+            memory: "4Gi"
+      volumes:
+        - name: vb-dask-volume
+          hostPath:
+            path: /D//git/vb/vb_kube/vb_django

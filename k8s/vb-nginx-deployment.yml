@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: vb-nginx
+  name: vb-nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vb-nginx
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: vb-nginx
+    spec:
+      containers:
+      - image: dbsmith88/vb-nginx
+        imagePullPolicy: Always
+        name: nginx
+        ports:
+        - containerPort: 80
+        - containerPort: 443
+        volumeMounts:
+        - mountPath: /etc/nginx/vb
+          name: vb-nginx-certs
+        - mountPath: /src/collected_static
+          name: vb-collected-static
+      restartPolicy: Always
+      volumes:
+      - name: vb-nginx-certs
+        persistentVolumeClaim:
+          claimName: vb-nginx-certs-pvc
+      - name: vb-collected-static
+        persistentVolumeClaim:
+          claimName: vb-collected-static-pvc

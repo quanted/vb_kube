@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app: vb-postgres
+  name: vb-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vb-postgres
+  serviceName: vb-postgres
+  template:
+    metadata:
+      labels:
+        app: vb-postgres
+    spec:
+      containers:
+      - image: postgres
+        name: vb-postgres
+        ports:
+        - containerPort: 5432
+        envFrom:
+          - configMapRef:
+              name: vb-config
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: vb-postgres-pvolume
+      terminationGracePeriodSeconds: 10
+      volumes:
+      - name: vb-postgres-pvolume
+        persistentVolumeClaim:
+          claimName: vb-postgres-pv-claim

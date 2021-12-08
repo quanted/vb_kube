@@ -1,0 +1,14 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: vb-dask-scheduler
+spec:
+  selector:
+    app: vb-dask-scheduler
+  ports:
+  - name: dask-scheduler
+    port: 8786
+    targetPort: 8786
+  - name: dask-ui
+    port: 8787
+    targetPort: 8787

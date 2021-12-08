@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: vb-dask-scheduler
+  name: vb-dask-scheduler
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vb-dask-scheduler
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: vb-dask-scheduler
+    spec:
+      containers:
+      - args:
+        - dask-scheduler
+        image: dbsmith88/vb_dask:latest
+        name: vb-dask-scheduler
+        ports:
+        - containerPort: 8786
+        - containerPort: 8787
+      hostname: vb-dask-scheduler
+      restartPolicy: Always

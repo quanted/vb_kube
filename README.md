@@ -51,3 +51,11 @@ After minikube has been started and is running, run the following two commands i
     minikube mount PATH_TO_VB_DJANGO:/host/vb_django
 ```
 These windows will need to be left active for the mounts to remain accessible.
+
+##### Docker-Desktop (Windows)
+
+```commandline
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.2.0/aio/deploy/recommended.yaml
+kubectl proxy
+```
+Kubernetes dashboard is accessible from: http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
