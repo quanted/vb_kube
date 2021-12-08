@@ -30,4 +30,4 @@ spec:
     storage: 1Gi
   storageClassName: vb-collected-static
   hostPath:
-    path: \D\\git\vb\collected-static
+    path: \D\\git\vb\collected_static

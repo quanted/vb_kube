@@ -23,7 +23,7 @@ spec:
         image: dbsmith88/vb_django:latest
         command:
           - sh
-          - /opt/app/vb_django/start-server.sh
+          - /opt/app/start-server.sh
         imagePullPolicy: Always
         envFrom:
           - configMapRef:
@@ -31,16 +31,16 @@ spec:
         ports:
         - containerPort: 8080
         volumeMounts:
-        - mountPath: /opt/app/vb_django
-          name: vb-django-volume
-        - mountPath: /opt/app/collected-static
+#        - mountPath: /opt/app/
+#          name: vb-django-volume
+        - mountPath: /opt/collected_static
           name: vb-collected-static
       restartPolicy: Always
       volumes:
-      - name: vb-django-volume
-        hostPath:
-#          path: /host/vb_django
-          path: /D//git/vb/vb_kube/vb_django
+#      - name: vb-django-volume
+#        hostPath:
+##          path: /host/vb_django
+#          path: /D//git/vb/vb_kube/vb_django
       - name: vb-collected-static
         persistentVolumeClaim:
           claimName: vb-collected-static-pvc
