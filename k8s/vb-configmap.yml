@@ -9,5 +9,5 @@ data:
   POSTGRES_USER: "postgres"
   POSTGRES_PASSWORD: "postgres"
   IN_DOCKER: "True"
-  DASK_SCHEDULER: "dask-scheduler:8786"
+  DASK_SCHEDULER: "vb-dask-scheduler:8786"
   DJANGO_SETTINGS_MODULE: "vb_django.settings"

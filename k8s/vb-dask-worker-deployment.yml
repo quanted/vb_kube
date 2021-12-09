@@ -28,7 +28,7 @@ spec:
           - configMapRef:
               name: vb-config
         volumeMounts:
-          - mountPath: /app
+          - mountPath: /app/vb_django
             name: vb-dask-volume
         resources:
           requests:
