@@ -54,8 +54,33 @@ These windows will need to be left active for the mounts to remain accessible.
 
 ##### Docker-Desktop (Windows)
 
+Docker-Desktop is an alternative option for running a single-node kubernetes cluster. After installing Docker-Desktop, or updating to the latest version, turn Kubernetes on in Settings and restart docker-desktop. A new kubernetes context will be created 'docker-desktop' which can be used to run the stack.
+
+To allow for the mounts, the mounted directories need to be specified or be a sub-directory of a directory which docker-desktop has access to 'Resources > File Sharing'. The compute resources which are specified are the max that the kubernetes cluster will have access to.
+Depending on existing kubectl configurations, the new context may need to be set as current.
+```commandline
+kubectl config current-context
+```
+If 'docker-desktop' is not the current config, check to see if it is listed in the available contexts
+```commandline
+kubectl config get-contexts
+```
+if available, set 'docker-desktop' to the current context by
+```commandline
+kubectl config set-context docker-desktop
+```
+Now any kubectl will use the docker-desktop context, the kubernetes resources for vb can now be applied.
+The order to apply the resources should be: ConfigMap, PersistentVolumes, PersistentVolumeClaims, Services, StatefulSet, Deployments, HPAs.
+
+To access the kubernetes dashboard run the following commands
 ```commandline
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.2.0/aio/deploy/recommended.yaml
 kubectl proxy
 ```
-Kubernetes dashboard is accessible from: http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
+The resources necessary for running and accessing the dashboard are now running, and can be accessed at:
+http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
+
+Django and Dask have optional hostPath mounts which can be used for local code development and testing, code is mounted directly to the pod so no image rebuilds required (typically requires a pod restart).
+To use these hostPaths make sure that the 'vb-django-volume' Volume and VolumeMount blocks are both uncommented. If the hostPath mounts are not used, Django and Dask will use the current code in the image being used (most likely the last commit to github on the main branch).
+
+To access the running technology stack, we can access the open NodePort on vb-nginx that is specified to be port 31000. http://localhost:31000/vb will open up the web application, alternatively http requests can be made to the same base url via Postman or curl.
