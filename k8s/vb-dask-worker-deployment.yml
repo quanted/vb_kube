@@ -20,9 +20,6 @@ spec:
       restartPolicy: Always
       containers:
       - name: vb-dask-worker
-        command:
-        - dask-worker
-        - vb-dask-scheduler:8786
         image: dbsmith88/vb_dask:latest
         envFrom:
           - configMapRef:

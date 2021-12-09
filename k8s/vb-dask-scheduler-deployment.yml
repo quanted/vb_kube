@@ -18,6 +18,11 @@ spec:
     spec:
       containers:
       - args:
+        - conda
+        - run
+        - -n
+        - pyenv
+        - --no-capture-output
         - dask-scheduler
         image: dbsmith88/vb_dask:latest
         name: vb-dask-scheduler
