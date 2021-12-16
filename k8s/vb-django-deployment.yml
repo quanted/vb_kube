@@ -20,7 +20,7 @@ spec:
       hostname: vb-django
       containers:
       - name: vb-django
-        image: dbsmith88/vb_django:latest
+        image: dbsmith88/vb_django:dev-dask-ml
         command:
           - sh
           - /opt/app/start-server.sh

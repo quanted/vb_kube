@@ -20,7 +20,7 @@ spec:
       restartPolicy: Always
       containers:
       - name: vb-dask-worker
-        image: dbsmith88/vb_dask:latest
+        image: dbsmith88/vb_dask:dev-dask-ml
         envFrom:
           - configMapRef:
               name: vb-config
@@ -29,9 +29,11 @@ spec:
             name: vb-dask-volume
         resources:
           requests:
-            memory: "2Gi"
+            memory: "500Mi"
+            cpu: "1000m"
           limits:
-            memory: "4Gi"
+            memory: "2Gi"
+            cpu: "2000m"
       volumes:
         - name: vb-dask-volume
           hostPath:

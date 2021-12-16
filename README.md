@@ -69,18 +69,41 @@ if available, set 'docker-desktop' to the current context by
 ```commandline
 kubectl config set-context docker-desktop
 ```
+or
+```commandline
+kubectl config use-context docker-desktop
+```
 Now any kubectl will use the docker-desktop context, the kubernetes resources for vb can now be applied.
 The order to apply the resources should be: ConfigMap, PersistentVolumes, PersistentVolumeClaims, Services, StatefulSet, Deployments, HPAs.
 
-To access the kubernetes dashboard run the following commands
+Or to apply all the kubernetes manifests for the application at once, run the following from the root of the repo:
+```commandline
+kubectl apply -f k8s\
+```
+To create the resources for the  kubernetes dashboard, run the following commands
 ```commandline
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.2.0/aio/deploy/recommended.yaml
 kubectl proxy
 ```
-The resources necessary for running and accessing the dashboard are now running, and can be accessed at:
+The resources necessary for the dashboard are now running, and can be accessed at:
 http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
+
+The first time reaching the dashboard will prompt for a login token or key, to skip this step open the kubernetes-dashboard deployment for editing 
+```commandline
+kubectl edit deploy/kubernetes-dashboard -n kubernetes-dashboard
+```
+and add the following line under spec.containers.args after the others in the list of args:
+```yaml
+- --enable-skip-login
+```
+Those changes will automatically apply once the editing is completed and the yaml is valid. Then revisiting or reloading the dashboard will again prompt for a token/login but also have the option to skip.
 
 Django and Dask have optional hostPath mounts which can be used for local code development and testing, code is mounted directly to the pod so no image rebuilds required (typically requires a pod restart).
 To use these hostPaths make sure that the 'vb-django-volume' Volume and VolumeMount blocks are both uncommented. If the hostPath mounts are not used, Django and Dask will use the current code in the image being used (most likely the last commit to github on the main branch).
 
 To access the running technology stack, we can access the open NodePort on vb-nginx that is specified to be port 31000. http://localhost:31000/vb will open up the web application, alternatively http requests can be made to the same base url via Postman or curl.
+ 
+Resource metrics can also be tracked by deploying the metric-server
+```commandline
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+```
