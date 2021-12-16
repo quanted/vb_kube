@@ -20,7 +20,7 @@ spec:
       restartPolicy: Always
       containers:
       - name: vb-dask-worker
-        image: dbsmith88/vb_dask:dev-dask-ml
+        image: dbsmith88/vb_dask:latest
         envFrom:
           - configMapRef:
               name: vb-config
