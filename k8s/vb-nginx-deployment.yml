@@ -17,7 +17,7 @@ spec:
         app: vb-nginx
     spec:
       containers:
-      - image: dbsmith88/vb-nginx
+      - image: ghcr.io/quanted/vb_nginx:main
         imagePullPolicy: Always
         name: nginx
         ports:

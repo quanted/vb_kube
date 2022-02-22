@@ -24,7 +24,7 @@ spec:
         - pyenv
         - --no-capture-output
         - dask-scheduler
-        image: dbsmith88/vb_dask:latest
+        image: ghcr.io/quanted/vb_dask:master
         name: vb-dask-scheduler
         ports:
         - containerPort: 8786
