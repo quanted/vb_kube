@@ -74,8 +74,16 @@ or
 kubectl config use-context docker-desktop
 ```
 Now any kubectl will use the docker-desktop context, the kubernetes resources for vb can now be applied.
-The order to apply the resources should be: ConfigMap, PersistentVolumes, PersistentVolumeClaims, Services, StatefulSet, Deployments, HPAs.
 
+For local development the hostPath:path: for the vb-django-volume in vb-django-deployment.yml and the hostPath:path: for the vb-dask-volume in vb-dask-worker-deployment.yml need to be changed to the path to the local vb_kube/vb_django folder. For example:
+```yml
+volumes:
+        - name: vb-django-volume
+          hostPath:
+            #          path: /host/vb_django
+            path: /C//path_to_the_cloned_repo/vb_kube/vb_django
+```
+The order to apply the resources should be: ConfigMap, PersistentVolumes, PersistentVolumeClaims, Services, StatefulSet, Deployments, HPAs.
 Or to apply all the kubernetes manifests for the application at once, run the following from the root of the repo:
 ```commandline
 kubectl apply -f k8s\
