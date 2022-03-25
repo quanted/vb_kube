@@ -2,23 +2,26 @@
 
 Virtual Beach Web is an analytical prediction making tool using statistical and machine learning techniques through a dynamic web user interface. The application is fully containerized and deployed using kubernetes for container orchestration. The full technology stack contains the following components:
   - Django (web framework)
-  - Angular 10 (graphical user interface, served through django)
+  - Angular 11 (graphical user interface, served through django)
+  
+      using Leaflet and D3.js for mapping and data visualization
   - PostgreSQL (django database)
   - Dask (asynchronous and distributed tasks)
  
-#### Docker Builds
+### Docker Builds
 | Deployment | Docker Image | Build Status |
 | ---------- | ------------ | ------------ | 
 | vb-django.yml | [quanted/vb_django](https://cloud.docker.com/u/quanted/repository/docker/quanted/vb_django) | ![Docker Build Status](https://img.shields.io/docker/cloud/build/quanted/vb_django.svg) |
 | vb-dask.yml | [quanted/vb_dask ](https://cloud.docker.com/u/quanted/repository/docker/quanted/vb_dask) | ![Docker Build Status](https://img.shields.io/docker/cloud/build/quanted/vb_dask.svg) |
 | vb-postgres.yml | [postgres ](https://cloud.docker.com/u/quanted/repository/docker/postgres) | Official Image |
 
-#### Requirements
+### Requirements
  - Python 3.8
  - Conda environment yml can be found in vb_django/environment.yml
  - pip requirements txt can be found in vb_django/install_requirements.txt (windows)
 
-#### Minikube Development (Windows)
+## Minikube Development (Windows)
+### Additional Requirements
  - Docker
  - Minikube
  - Administrative access
@@ -43,7 +46,7 @@ To access a deployment/pod within your minikube node, open up a tunnel access po
 ```
 
 
-##### Minikube Volumes (Windows)
+- ### Minikube Volumes (Windows)
 Using Minikube on windows with deployments that use mounted volumes requires an additional step to be able to access those volumes. Two volumes must be mounted to the minikube host, the container created in Docker. 
 After minikube has been started and is running, run the following two commands in two separate cmd windows terminals, as admin:
 ```
@@ -52,9 +55,14 @@ After minikube has been started and is running, run the following two commands i
 ```
 These windows will need to be left active for the mounts to remain accessible.
 
-##### Docker-Desktop (Windows)
+## Docker-Desktop (Windows)
+### Additional Requirements
+ - Docker Desktop
+ - Administrative access
 
 Docker-Desktop is an alternative option for running a single-node kubernetes cluster. After installing Docker-Desktop, or updating to the latest version, turn Kubernetes on in Settings and restart docker-desktop. A new kubernetes context will be created 'docker-desktop' which can be used to run the stack.
+
+Docker Desktop needs to be run in Admin mode (Run as Administrator).
 
 To allow for the mounts, the mounted directories need to be specified or be a sub-directory of a directory which docker-desktop has access to 'Resources > File Sharing'. The compute resources which are specified are the max that the kubernetes cluster will have access to.
 Depending on existing kubectl configurations, the new context may need to be set as current.
@@ -83,6 +91,16 @@ volumes:
             #          path: /host/vb_django
             path: /C//path_to_the_cloned_repo/vb_kube/vb_django
 ```
+
+You may also need to change the nodePort specified in vb-nginx-service.yml
+```yml
+ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 31000 <-- change this to anything higher (31001 for example)
+```
+      
 The order to apply the resources should be: ConfigMap, PersistentVolumes, PersistentVolumeClaims, Services, StatefulSet, Deployments, HPAs.
 Or to apply all the kubernetes manifests for the application at once, run the following from the root of the repo:
 ```commandline
