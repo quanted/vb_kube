@@ -4,6 +4,7 @@ metadata:
   labels:
     app: vb-postgres
   name: vb-postgres
+  namespace: qed-kube-dev
 spec:
   replicas: 1
   selector:
@@ -24,7 +25,7 @@ spec:
           - configMapRef:
               name: vb-config
         volumeMounts:
-        - mountPath: /var/lib/postgresql/data
+        - mountPath: /var/lib/postgresql
           name: vb-postgres-pvolume
       terminationGracePeriodSeconds: 10
       volumes:

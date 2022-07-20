@@ -2,12 +2,13 @@ apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: vb-dask-worker
+  namespace: qed-kube-dev
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
     name: vb-dask-worker
-  minReplicas: 3
+  minReplicas: 1
   maxReplicas: 5
   metrics:
 #  - type: Resource

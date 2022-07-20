@@ -4,6 +4,7 @@ metadata:
   labels:
     app: vb-dask-scheduler
   name: vb-dask-scheduler
+  namespace: qed-kube-dev
 spec:
   replicas: 1
   selector:

@@ -1,33 +1,33 @@
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: vb-nginx-certs-pv
-  labels:
-    type: local
-    app: vb-nginx-certs
-spec:
-  accessModes:
-  - ReadWriteMany
-  capacity:
-    storage: 1Gi
-  storageClassName: vb-nginx-certs
-  hostPath:
-    path: \D\\git\vb\nginx
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: vb-nginx-certs-pv
+#   labels:
+#     type: local
+#     app: vb-nginx-certs
+# spec:
+#   accessModes:
+#   - ReadWriteMany
+#   capacity:
+#     storage: 1Gi
+#   storageClassName: vb-nginx-certs
+#   hostPath:
+#     path: \D\\git\vb\nginx
 
----
+# ---
 
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: vb-collected-static-pv
-  labels:
-    type: local
-    app: vb-collected-static
-spec:
-  accessModes:
-  - ReadWriteMany
-  capacity:
-    storage: 1Gi
-  storageClassName: vb-collected-static
-  hostPath:
-    path: \D\\git\vb\collected_static
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: vb-collected-static-pv
+#   labels:
+#     type: local
+#     app: vb-collected-static
+# spec:
+#   accessModes:
+#   - ReadWriteMany
+#   capacity:
+#     storage: 1Gi
+#   storageClassName: vb-collected-static
+#   hostPath:
+#     path: \D\\git\vb\collected_static

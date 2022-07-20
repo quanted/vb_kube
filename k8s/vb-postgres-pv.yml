@@ -1,16 +1,16 @@
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: vb-postgres-pv
-  labels:
-    type: local
-    app: vb-postgres
-spec:
-  storageClassName: vb-postgres
-  capacity:
-    storage: 5Gi
-  accessModes:
-    - ReadWriteMany
-  hostPath:
-#    path: /host/app_data
-    path: /D//git/vb/app_data
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: vb-postgres-pv
+#   labels:
+#     type: local
+#     app: vb-postgres
+# spec:
+#   storageClassName: vb-postgres
+#   capacity:
+#     storage: 5Gi
+#   accessModes:
+#     - ReadWriteMany
+#   hostPath:
+# #    path: /host/app_data
+#     path: /D//git/vb/app_data

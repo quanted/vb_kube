@@ -4,7 +4,7 @@ metadata:
   labels:
     app: vb-django
   name: vb-django
-  namespace: default
+  namespace: qed-kube-dev
 spec:
   replicas: 1
   strategy:
@@ -31,16 +31,10 @@ spec:
         ports:
         - containerPort: 8080
         volumeMounts:
-        - mountPath: /opt/app/
-          name: vb-django-volume
         - mountPath: /opt/collected_static
           name: vb-collected-static
       restartPolicy: Always
       volumes:
-      - name: vb-django-volume
-        hostPath:
-#          path: /host/vb_django
-          path: /D//git/vb/vb_kube/vb_django
       - name: vb-collected-static
         persistentVolumeClaim:
-          claimName: vb-collected-static-pvc
+          claimName: collected-static-pvolume-claim1

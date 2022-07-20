@@ -2,6 +2,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: vb-dask-scheduler
+  namespace: qed-kube-dev
 spec:
   selector:
     app: vb-dask-scheduler

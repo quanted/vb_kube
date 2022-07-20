@@ -4,6 +4,7 @@ metadata:
   labels:
     app: vb-dask-worker
   name: vb-dask-worker
+  namespace: qed-kube-dev
 spec:
   replicas: 1
   selector:
@@ -24,9 +25,6 @@ spec:
         envFrom:
           - configMapRef:
               name: vb-config
-        volumeMounts:
-          - mountPath: /app/vb_django
-            name: vb-dask-volume
         resources:
           requests:
             memory: "500Mi"
@@ -34,7 +32,3 @@ spec:
           limits:
             memory: "2Gi"
             cpu: "2000m"
-      volumes:
-        - name: vb-dask-volume
-          hostPath:
-            path: /D//git/vb/vb_kube/vb_django
