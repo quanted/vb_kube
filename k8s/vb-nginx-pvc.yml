@@ -2,6 +2,7 @@
 # kind: PersistentVolumeClaim
 # metadata:
 #   name: vb-nginx-certs-pvc
+#   namespace: qed-kube-dev
 #   labels:
 #     app: vb-nginx-certs
 # spec:
@@ -21,6 +22,7 @@
 # kind: PersistentVolumeClaim
 # metadata:
 #   name: vb-collected-static-pvc
+#   namespace: qed-kube-dev
 #   labels:
 #     app: vb-collected-static
 # spec:
