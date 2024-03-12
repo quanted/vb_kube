@@ -1,0 +1,53 @@
+version: '3.1'
+
+volumes:
+  collected_static:
+
+services:
+
+  vb-nginx:
+    restart: unless-stopped
+    build: ./vb_nginx
+    image: vb-nginx-test
+    container_name: vb-nginx
+    ports:
+      - "80:80"
+    links:
+      - vb-django:uwsgi_django
+    volumes:
+      - collected_static:/src/collected_static
+
+  vb-django:
+    restart: unless-stopped
+    build: ./vb_django
+    image: vb-django-test
+    container_name: vb-django
+    command: ["sh", "/opt/app/start-server.sh"]
+    expose:
+      - "8080"
+    volumes:
+      - collected_static:/opt/collected_static
+      # - ./vb_django:/opt/app
+
+  vb-dask-scheduler:
+    restart: unless-stopped
+    image: ghcr.io/quanted/vb_dask:master
+    container_name: vb-dask-scheduler
+    hostname: dask-scheduler
+    expose:
+     - 8786
+     - 8787
+    command: ["conda", "run", "-n", "pyenv", "--no-capture-output", "dask-scheduler"]
+
+  vb-dask-worker:
+    restart: unless-stopped
+    image: ghcr.io/quanted/vb_dask:master
+    container_name: vb-dask-worker
+    hostname: dask-worker
+    command: ["conda", "run", "-n", "pyenv", "--no-capture-output", "dask-worker", "vb-dask-scheduler:8786"]
+    environment:
+      PYTHONPATH: '/src:/src/qed:/src/qed/flask_qed'
+      IN_DOCKER: "True"
+      HMS_BACKEND_SERVER_INTERNAL: "https://qedcloud.net/hms/"
+      HMS_WORKFLOW_BACKEND: "https://qedcloud.net/hms/rest/"
+      HMS_BACKEND: "https://qedcloud.net/hms/"
