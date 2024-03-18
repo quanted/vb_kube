@@ -27,7 +27,7 @@ services:
       - "8080"
     volumes:
       - collected_static:/opt/collected_static
-      # - ./vb_django:/opt/app
+      - ./vb_django:/opt/app
 
   vb-dask-scheduler:
     restart: unless-stopped

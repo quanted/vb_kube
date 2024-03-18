@@ -1,0 +1,66 @@
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: vb-nginx-certs-pvc
+#   namespace: qed-kube-dev
+#   labels:
+#     app: vb-nginx-certs
+# spec:
+#   accessModes:
+#     - ReadWriteMany
+#   # storageClassName: vb-nginx-certs
+#   # storageClassName: hostpath
+#   resources:
+#     requests:
+#       storage: 1Gi  
+#   # volumeName: vb-nginx-certs-pv
+#   selector:
+#     matchLabels:
+#       release: "stable"
+#       name: vb-nginx-certs-pv
+
+# ---
+
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: vb-collected-static-pvc
+#   namespace: qed-kube-dev
+#   labels:
+#     app: vb-collected-static
+# spec:
+#   accessModes:
+#     - ReadWriteMany
+#   # storageClassName: vb-collected-static
+#   # storageClassName: hostpath
+#   resources:
+#     requests:
+#       storage: 1Gi
+#   # volumeName: vb-collected-static-pv
+#   selector:
+#     matchLabels:
+#       release: "stable"
+#       name: vb-collected-static-pv
+
+# ---
+
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: vb-postgres-pv-claim
+#   namespace: qed-kube-dev
+#   labels:
+#     app: vb-postgres
+# spec:
+#   accessModes:
+#     - ReadWriteMany
+#   # storageClassName: vb-postgres
+#   # storageClassName: hostpath
+#   # volumeName: vb-postgres-pv
+#   resources:
+#     requests:
+#       storage: 5Gi
+#   selector:
+#     matchLabels:
+#       release: "stable"
+#       name: "vb-postgres-pv"
