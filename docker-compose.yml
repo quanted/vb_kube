@@ -8,7 +8,7 @@ services:
   vb-nginx:
     restart: unless-stopped
     build: ./vb_nginx
-    image: vb-nginx-test
+    image: ghcr.io/quanted/vb_nginx:dev-aws
     container_name: vb-nginx
     ports:
       - "80:80"
@@ -20,7 +20,7 @@ services:
   vb-django:
     restart: unless-stopped
     build: ./vb_django
-    image: vb-django-test
+    image: ghcr.io/quanted/vb_django:dev
     container_name: vb-django
     command: ["sh", "/opt/app/start-server.sh"]
     expose:
@@ -31,7 +31,7 @@ services:
 
   vb-dask-scheduler:
     restart: unless-stopped
-    image: ghcr.io/quanted/vb_dask:master
+    image: ghcr.io/quanted/vb_dask:dev
     container_name: vb-dask-scheduler
     hostname: dask-scheduler
     expose:
@@ -41,7 +41,7 @@ services:
 
   vb-dask-worker:
     restart: unless-stopped
-    image: ghcr.io/quanted/vb_dask:master
+    image: ghcr.io/quanted/vb_dask:dev
     container_name: vb-dask-worker
     hostname: dask-worker
     command: ["conda", "run", "-n", "pyenv", "--no-capture-output", "dask-worker", "vb-dask-scheduler:8786"]
