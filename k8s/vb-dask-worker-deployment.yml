@@ -21,7 +21,7 @@ spec:
       restartPolicy: Always
       containers:
       - name: vb-dask-worker
-        image: ghcr.io/quanted/vb_dask:master
+        image: ghcr.io/quanted/vb_dask:dev
         envFrom:
           - configMapRef:
               name: vb-config
