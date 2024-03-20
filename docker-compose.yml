@@ -11,7 +11,7 @@ services:
     image: ghcr.io/quanted/vb_nginx:dev-aws
     container_name: vb-nginx
     ports:
-      - "80:80"
+      - "81:80"
     links:
       - vb-django:uwsgi_django
     volumes:
