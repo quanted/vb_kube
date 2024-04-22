@@ -21,6 +21,8 @@ spec:
       containers:
       - image: ghcr.io/quanted/vb_nginx:main
         imagePullPolicy: Always
+      # - image: vb-nginx
+      #   imagePullPolicy: Never
         name: nginx
         ports:
         - containerPort: 80

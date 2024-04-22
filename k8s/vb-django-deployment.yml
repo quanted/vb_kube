@@ -21,10 +21,12 @@ spec:
       containers:
       - name: vb-django
         image: ghcr.io/quanted/vb_django:dev
+        imagePullPolicy: Always
+        # image: vb-django
+        # imagePullPolicy: Never
         command:
           - sh
           - /opt/app/start-server.sh
-        imagePullPolicy: Always
         envFrom:
           - configMapRef:
               name: vb-config
