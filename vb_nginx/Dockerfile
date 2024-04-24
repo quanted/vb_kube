@@ -15,4 +15,4 @@ RUN rm -rf /usr/share/nginx/html/* && \
 COPY $CONFIG /etc/nginx/conf.d/
 
 # COPY --from=ghcr.io/usepa/cyanweb-angular:dev-kube /app/dist /usr/share/nginx/html
-COPY --from=vb-angular /app/dist /usr/share/nginx/html
+COPY --from=ghcr.io/quanted/vb-angular:dev /app/dist /usr/share/nginx/html
