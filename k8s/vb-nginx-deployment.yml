@@ -19,7 +19,7 @@ spec:
         app: vb-nginx
     spec:
       containers:
-      - image: ghcr.io/quanted/vb_nginx:main
+      - image: ghcr.io/quanted/vb_nginx:dev-aws
         imagePullPolicy: Always
       # - image: vb-nginx
       #   imagePullPolicy: Never
