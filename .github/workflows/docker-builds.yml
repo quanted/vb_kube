@@ -9,7 +9,7 @@ env:
   GITHUB_TOKEN: ${{ secrets.NTA_ACTION_TOKEN }}
 
 jobs:
-  build-postgres:
+  build-nginx:
     runs-on: ubuntu-latest
     permissions:
       contents: read
