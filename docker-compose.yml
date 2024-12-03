@@ -1,16 +1,15 @@
-version: '3.1'
 
 volumes:
   collected_static:
 
 services:
 
-  node-builder:
-    build: ./vb_angular
-    image: vb-angular
-    # image: node:lts-alpine
-    volumes:
-      - ./vb_angular:/app
+  # node-builder:
+  #   build: ./vb_angular
+  #   image: vb-angular
+  #   # image: node:lts-alpine
+  #   volumes:
+  #     - ./vb_angular:/app
 
   vb-nginx:
     restart: unless-stopped
@@ -18,8 +17,7 @@ services:
     image: ghcr.io/quanted/vb_nginx:dev-aws
     container_name: vb-nginx
     ports:
-      # - "81:80"
-      - "80:80"
+      - "81:80"
     links:
       - vb-django:uwsgi_django
     volumes:
@@ -30,7 +28,6 @@ services:
     build: ./vb_django
     image: ghcr.io/quanted/vb_django:dev
     container_name: vb-django
-    command: ["sh", "/opt/app/start-server.sh"]
     expose:
       - "8080"
     volumes:
@@ -39,6 +36,7 @@ services:
     environment:
       IN_DOCKER: "True"
       DJANGO_SETTINGS_MODULE: "vb_django.settings"
+      DASK_SCHEDULER: vb-dask-scheduler:8786
 
   vb-dask-scheduler:
     restart: unless-stopped
@@ -65,11 +63,13 @@ services:
 
   vb-postgres:
     restart: unless-stopped
-    image: postgres
+    build: ./vb_postgres
+    image: vb-postgres
     expose:
       - 5432
     environment:
       POSTGRES_DB: "vb_postgres"
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgres"
-
+    # volumes:
+    #   - ./vb_postgres:/tmp
